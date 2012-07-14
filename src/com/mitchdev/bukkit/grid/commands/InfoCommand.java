@@ -40,17 +40,41 @@ public class InfoCommand extends CommandHandler {
 		
 	}
 
+	/**
+	 * Prints out a pads information to the specified sender.
+	 * @param pad The pad for which we want to show information for.
+	 * @param sender The sender of the command.
+	 */
 	public void padInfo ( Pad pad, CommandSender sender ) {
 		
-		sender.sendMessage(ChatColor.AQUA + "--- " + pad.getName() + " ---");
+		// Null check
+		if ( pad == null ) {
+			return;
+		}
+		
+		sender.sendMessage( ChatColor.AQUA + "--- " + pad.getName() + " ---");
 		
 		sender.sendMessage( ChatColor.YELLOW + "Owner: " + ChatColor.RESET + pad.getOwner() );
-		sender.sendMessage( ChatColor.YELLOW + "Networks:" );
+		
+		boolean found = false;
 		
 		for ( String network : pad.getNetworks() ) {
 			
+			if ( network == null || network.length() == 0 ) {
+				continue;
+			}
+			
+			if ( !found ) {
+				found = true;
+				sender.sendMessage( ChatColor.YELLOW + "Network(s):" );
+			}
+			
 			sender.sendMessage( " " + network );
 			
+		}
+		
+		if ( !found ) {
+			sender.sendMessage( ChatColor.YELLOW + "Network: GLOBAL" );
 		}
 		
 		sender.sendMessage( ChatColor.YELLOW + "Switches: " + ChatColor.RESET + pad.getSwitches().size() );
