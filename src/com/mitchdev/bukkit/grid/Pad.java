@@ -372,6 +372,10 @@ public class Pad {
 	 */
 	public boolean isEnabled ( ) {
 		
+		if ( disabled ) {
+			return false;
+		}
+		
 		for ( Location loc : switches ) {
 			
 			Block block = loc.getBlock();
@@ -390,6 +394,10 @@ public class Pad {
 		
 		return true;
 		
+	}
+
+	public void setEnabled(boolean b) {
+		this.disabled = !b;
 	}
 	
 }

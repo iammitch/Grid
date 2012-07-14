@@ -96,10 +96,10 @@ public class PadCommand extends CommandHandler {
 						padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + (match?1:0), args.length) );
 					}
 					else if ( command.equalsIgnoreCase( "enable" ) ) {
-						
+						padEnableCommand( grid, sender, pad );
 					}
 					else if ( command.equalsIgnoreCase( "disable" ) ) {
-						
+						padDisableCommand( grid, sender, pad );
 					}
 					else if ( command.equalsIgnoreCase( "set" ) ) {
 						
@@ -118,6 +118,30 @@ public class PadCommand extends CommandHandler {
 		}
 		
 		return false;
+	}
+	
+	private void padEnableCommand ( Grid grid, CommandSender sender, Pad pad ) {
+		
+		// Permissions check.
+		if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.pad.enable" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
+			return;
+		}
+		
+		pad.setEnabled ( true );
+		
+	}
+	
+	private void padDisableCommand ( Grid grid, CommandSender sender, Pad pad ) {
+		
+		// Permissions check.
+		if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.pad.disable" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
+			return;
+		}
+		
+		pad.setEnabled ( false );
+		
 	}
 	
 	private void padNetworkCommand ( Grid grid, CommandSender sender, Pad pad, String[] args ) {
