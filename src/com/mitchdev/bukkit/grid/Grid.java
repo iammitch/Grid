@@ -90,6 +90,13 @@ public class Grid extends JavaPlugin implements Listener {
 				return pad;
 			}
 		}
+		for ( Network network : networks ) {
+			for ( Pad pad : network.getPads() ) {
+				if ( pad.getName().equalsIgnoreCase(n) ) {
+					return pad;
+				}
+			}
+		}
 		return null;
 	}
 
