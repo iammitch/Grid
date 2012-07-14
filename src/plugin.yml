@@ -1,0 +1,12 @@
+name: Grid
+authors: [iammitch]
+website: "http://mitchdev.com/projects/grid/"
+main: com.mitchdev.bukkit.grid.Grid
+version: 1.0.0
+softdepend: [Multiverse-Core,PermissionsEx]
+commands:
+  t:
+    description: Teleports player to given pad.
+  grid:
+    aliases: [g, gp, gs, gn, gi, gl]
+    description: Grid
