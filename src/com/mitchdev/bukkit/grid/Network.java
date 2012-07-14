@@ -48,7 +48,7 @@ public class Network {
 		return this.pads;
 	}
 	
-	public void addPad ( Pad pad ) {
+	public void add ( Pad pad ) {
 		this.pads.add(pad);
 	}
 	

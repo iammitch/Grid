@@ -178,7 +178,7 @@ public class PadCommand extends CommandHandler {
 					// It's in the default (global) network.
 					grid.removePad(pad.getName());
 				}
-				grid.getNetwork( networkName ).addPad(pad);
+				grid.getNetwork( networkName ).add(pad);
 			}
 			
 			pad.addNetwork( networkName, def );

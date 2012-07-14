@@ -41,6 +41,7 @@ public class Grid extends JavaPlugin implements Listener {
 	private LinkedList<Network> networks;
 	private FileConfiguration padConfiguration = null;
 	private CommandManager commands;
+	private GridListener listener;
 
 	private File padConfigFile = null;
 
@@ -120,7 +121,7 @@ public class Grid extends JavaPlugin implements Listener {
 
 			ConfigurationSection padConfig = section
 					.getConfigurationSection(key);
-			globalNetwork.addPad(Pad.createFromConfiguration(this, key, padConfig));
+			globalNetwork.add(Pad.createFromConfiguration(this, key, padConfig));
 
 		}
 		
@@ -146,7 +147,8 @@ public class Grid extends JavaPlugin implements Listener {
 	public void onEnable() {
 		Grid.instance = this;
 		globalNetwork = new Network("global");
-		getServer().getPluginManager().registerEvents(this, this);
+		this.listener = new GridListener(this);
+		getServer().getPluginManager().registerEvents(listener, this);
 		// Load the configuration file.
 		networks = new LinkedList<Network>();
 		if (padConfigFile == null) {
@@ -167,44 +169,6 @@ public class Grid extends JavaPlugin implements Listener {
 		commands.addHandler(new TriggerCommand());
 		commands.addHandler(new PadCommand());
 		commands.addHandler(new TestCommand());
-	}
-
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent e) {
-
-	}
-	
-	@EventHandler
-	public void onSignChange(SignChangeEvent e) {
-		Player player = e.getPlayer();
-		if (!player.hasPermission("grid.pad.create")) {
-			return;
-		}
-		if (e.getLine(0).equalsIgnoreCase("[Grid]")) {
-			String size = e.getLine(1);
-			String id = e.getLine(2);
-			String pass = e.getLine(3);
-			Location loc = e.getBlock().getLocation();
-			String[] s = size.split(",");
-			int x = Integer.parseInt(s[0]);
-			int y = Integer.parseInt(s[1]);
-			int z = Integer.parseInt(s[2]);
-			loc.setY(loc.getY() + y);
-			AABB bounds = new AABB(loc, x, y, z);
-			for (Pad pad : globalNetwork.getPads()) {
-				if (pad.getBounds().contains(bounds)) {
-					// Can't place portal here, it intersects another portal.
-					return;
-				}
-			}
-			// If we get here, place the portal.
-			String[] name = id.split(":");
-			String padName = name.length != 1 ? name[1] : name[0];
-			Pad pad = new Pad(this, padName, bounds, pass);
-			globalNetwork.addPad(pad);
-			e.getBlock().breakNaturally();
-			player.sendMessage(getChatPrefix() + "Successfully created pad!");
-		}
 	}
 
 	public void removePad(String name) {
@@ -244,6 +208,10 @@ public class Grid extends JavaPlugin implements Listener {
 					"Could not save config to " + "pads.yml", e);
 		}
 
+	}
+
+	public Network getGlobalNetwork() {
+		return this.globalNetwork;
 	}
 
 }
