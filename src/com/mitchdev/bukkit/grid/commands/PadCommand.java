@@ -16,6 +16,30 @@ public class PadCommand extends CommandHandler {
 
 	final String[] COMMANDS = { "network", "enable", "disable", "set" };
 	
+	InfoCommand infoCommand = new InfoCommand();
+	
+	/**
+	 * Prints a help message that describes the avaliable commands to the player/console.
+	 * @param sender
+	 */
+	public void helpMessage ( CommandSender sender ) {
+		sender.sendMessage( Grid.getChatPrefix() + "Pads" );
+		
+		sender.sendMessage("NOTE: [pad_name] can be omitted from the command if you're standing on the pad you which to manage");
+		
+		sender.sendMessage("/grid pad [pad_name] network add <name> [default]");
+		sender.sendMessage("/grid pad [pad_name] network remove <name>");
+		sender.sendMessage("/grid pad [pad_name] network default <name>");
+		
+		sender.sendMessage("/grid pad [pad_name] enable");
+		sender.sendMessage("/grid pad [pad_name] disable");
+		
+		sender.sendMessage("/grid pad [pad_name] set name <new_name>");
+		sender.sendMessage("/grid pad [pad_name] set visibility <visibility>");
+		sender.sendMessage("/grid pad [pad_name] set owner <name>");
+		sender.sendMessage("/grid pad [pad_name] set password <new_pass>");		
+	}
+	
 	@Override
 	public boolean onCommand(Grid grid, CommandSender sender, Command cmd,
 			String commandLabel, String[] args) {
@@ -25,28 +49,14 @@ public class PadCommand extends CommandHandler {
 			int offset = commandLabel.equalsIgnoreCase("gp") ? 0 : 1;
 			
 			if ( args.length == offset ) {
-				
-				sender.sendMessage( Grid.getChatPrefix() + "Pads" );
-				
-				sender.sendMessage("NOTE: [pad_name] can be omitted from the command if you're standing on the pad you which to manage");
-				
-				sender.sendMessage("/grid pad [pad_name] network add <name> [default]");
-				sender.sendMessage("/grid pad [pad_name] network remove <name>");
-				sender.sendMessage("/grid pad [pad_name] network default <name>");
-				
-				sender.sendMessage("/grid pad [pad_name] enable");
-				sender.sendMessage("/grid pad [pad_name] disable");
-				
-				sender.sendMessage("/grid pad [pad_name] set name <new_name>");
-				sender.sendMessage("/grid pad [pad_name] set visibility <visibility>");
-				sender.sendMessage("/grid pad [pad_name] set owner <name>");
-				sender.sendMessage("/grid pad [pad_name] set password <new_pass>");				
-				
+				helpMessage(sender);
 			}
 			else {
 				
 				String n = args[offset];
 				
+				// Check and make sure that we aren't
+				// bypassing the naming of the pad.
 				boolean match = false;
 				for ( String c : COMMANDS ) {
 					if ( c.equalsIgnoreCase ( n ) ) {
@@ -54,27 +64,51 @@ public class PadCommand extends CommandHandler {
 					}
 				}
 				
+				// Check that we're not a console trying to use the shorthand way of configuring
+				// a pad..
 				if ( match && !(sender instanceof Player) ) {
 					sender.sendMessage(Grid.getChatPrefix() + "This command can only be run by a player.");
 					sender.sendMessage(Grid.getChatPrefix() + "Please specify a pad name to use this command from the console.");
 					return true;
 				}
 				
+				// Determine what pad we are after.
 				Pad pad = match ? grid.getPad((Player)sender) : grid.getPad(n);
 				
+				// Make sure we found something.
 				if ( pad == null ) {
 					sender.sendMessage(Grid.getChatPrefix() + "Pad not found..");
 					return true;
 				}
 				
-				if ( n.equalsIgnoreCase( "network" ) ) {
-					padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + (match?1:0), args.length) );
-				}
-				else if ( n.equalsIgnoreCase( "enable" ) ) {
+				if ( args.length == offset + 1 ) {
+					
+					// No arguments specified after the name.
+					infoCommand.padInfo( pad, sender );
 					
 				}
-				else if ( n.equalsIgnoreCase( "disable" ) ) {
-					
+				else {
+				
+					String command = args[offset+(match?1:0)];
+				
+					// Split off depending on what command we are after.
+					if ( command.equalsIgnoreCase( "network" ) ) {
+						padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + (match?1:0), args.length) );
+					}
+					else if ( command.equalsIgnoreCase( "enable" ) ) {
+						
+					}
+					else if ( command.equalsIgnoreCase( "disable" ) ) {
+						
+					}
+					else if ( command.equalsIgnoreCase( "set" ) ) {
+						
+					}
+					else {
+						sender.sendMessage(Grid.getChatPrefix() + "Invalid Command.");
+						sender.sendMessage(Grid.getChatPrefix() + "Look at '/grid pad' for help.");
+					}
+			
 				}
 				
 			}
@@ -88,12 +122,13 @@ public class PadCommand extends CommandHandler {
 	
 	private void padNetworkCommand ( Grid grid, CommandSender sender, Pad pad, String[] args ) {
 		
+		// First things first, make sure that we can modify the network properties of any pad.
+		if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.pad.network.modify" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
+			return;
+		}
+		
 		if ( args[0].equalsIgnoreCase ( "add" ) ) {
-			
-			if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.network.add" ) ) {
-				sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
-				return;
-			}
 			
 			// Add a network to the given pad.
 			String networkName = args[1];
