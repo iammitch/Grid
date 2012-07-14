@@ -17,6 +17,7 @@ public class PadCommand extends CommandHandler {
 	final String[] COMMANDS = { "network", "enable", "disable", "set" };
 	
 	InfoCommand infoCommand = new InfoCommand();
+	SetCommand setCommand = new SetCommand();
 	
 	/**
 	 * Prints a help message that describes the avaliable commands to the player/console.
@@ -89,11 +90,11 @@ public class PadCommand extends CommandHandler {
 				}
 				else {
 				
-					String command = args[offset+(match?1:0)];
+					String command = args[offset+(match?2:1)];
 				
 					// Split off depending on what command we are after.
 					if ( command.equalsIgnoreCase( "network" ) ) {
-						padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + (match?1:0), args.length) );
+						padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + 2, args.length) );
 					}
 					else if ( command.equalsIgnoreCase( "enable" ) ) {
 						padEnableCommand( grid, sender, pad );
@@ -102,7 +103,7 @@ public class PadCommand extends CommandHandler {
 						padDisableCommand( grid, sender, pad );
 					}
 					else if ( command.equalsIgnoreCase( "set" ) ) {
-						
+						setCommand.doSet( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + 2, args.length) );
 					}
 					else {
 						sender.sendMessage(Grid.getChatPrefix() + "Invalid Command.");

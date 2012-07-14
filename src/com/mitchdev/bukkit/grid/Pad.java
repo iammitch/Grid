@@ -399,5 +399,9 @@ public class Pad {
 	public void setEnabled(boolean b) {
 		this.disabled = !b;
 	}
+
+	public void setName(String name) {
+		this.id = name;
+	}
 	
 }
