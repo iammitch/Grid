@@ -10,7 +10,6 @@ import com.mitchdev.bukkit.grid.CommandHandler;
 import com.mitchdev.bukkit.grid.Grid;
 import com.mitchdev.bukkit.grid.Network;
 import com.mitchdev.bukkit.grid.Pad;
-import com.mitchdev.bukkit.grid.Permissions;
 
 public class PadCommand extends CommandHandler {
 
@@ -132,7 +131,7 @@ public class PadCommand extends CommandHandler {
 	private void padEnableCommand ( Grid grid, CommandSender sender, Pad pad ) {
 		
 		// Permissions check.
-		if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.pad.enable" ) ) {
+		if ( !sender.hasPermission( "grid.pad.enable" ) ) {
 			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
@@ -144,7 +143,7 @@ public class PadCommand extends CommandHandler {
 	private void padDisableCommand ( Grid grid, CommandSender sender, Pad pad ) {
 		
 		// Permissions check.
-		if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.pad.disable" ) ) {
+		if ( !sender.hasPermission( "grid.pad.disable" ) ) {
 			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
@@ -156,7 +155,7 @@ public class PadCommand extends CommandHandler {
 	private void padNetworkCommand ( Grid grid, CommandSender sender, Pad pad, String[] args ) {
 		
 		// First things first, make sure that we can modify the network properties of any pad.
-		if ( (sender instanceof Player) && !Permissions.getInstance().hasPermission( (Player) sender, "grid.pad.network.modify" ) ) {
+		if ( !sender.hasPermission( "grid.pad.network.modify" ) ) {
 			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}

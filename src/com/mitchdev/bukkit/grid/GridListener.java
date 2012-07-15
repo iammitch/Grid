@@ -33,8 +33,7 @@ public class GridListener implements Listener {
 
 		if (e.getLine(0).equalsIgnoreCase("[Grid]")) {
 
-			if (!Permissions.getInstance().hasPermission(player,
-					"grid.pad.create")) {
+			if ( !player.hasPermission ( "grid.pad.create") ) {
 				player.sendMessage(Grid.getChatPrefix()
 						+ "You do not have access to this function..");
 				e.getBlock().breakNaturally();
@@ -92,8 +91,7 @@ public class GridListener implements Listener {
 				// First check and make sure that we have the permission to
 				// create a network pad.
 
-				if (Permissions.getInstance().hasPermission(player,
-						"grid.network." + network + ".pad.create")) {
+				if ( !player.hasPermission( "grid.network." + network + ".pad.create") ) {
 					player.sendMessage(Grid.getChatPrefix()
 							+ "You do not have access to this function..");
 					e.getBlock().breakNaturally();

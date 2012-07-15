@@ -10,7 +10,6 @@ import com.mitchdev.bukkit.grid.CommandHandler;
 import com.mitchdev.bukkit.grid.Grid;
 import com.mitchdev.bukkit.grid.Network;
 import com.mitchdev.bukkit.grid.Pad;
-import com.mitchdev.bukkit.grid.Permissions;
 import com.mitchdev.bukkit.grid.Visibility;
 
 public class SetCommand extends CommandHandler {
@@ -36,11 +35,8 @@ public class SetCommand extends CommandHandler {
 
 			if (commands[0].equalsIgnoreCase("name")) {
 				// Check that we have permission to use this command.
-				if (sender instanceof Player
-						&& !Permissions.getInstance().hasPermission(
-								(Player) sender, "grid.pad.set.name")) {
-					sender.sendMessage(Grid.getChatPrefix()
-							+ "ERROR: You do not have permission to use this command..");
+				if ( !sender.hasPermission( "grid.pad.set.name" ) ) {
+					sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 					return;
 				}
 				// Otherwise..
@@ -122,11 +118,8 @@ public class SetCommand extends CommandHandler {
 	private void setPadDescription(Grid grid, CommandSender sender, Pad pad,
 			String description) {
 
-		if (sender instanceof Player
-				&& !Permissions.getInstance().hasPermission((Player) sender,
-						"grid.pad.set.description")) {
-			sender.sendMessage(Grid.getChatPrefix()
-					+ "You do not have permission to use that command.");
+		if ( !sender.hasPermission( "grid.pad.set.description" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
 
@@ -148,11 +141,8 @@ public class SetCommand extends CommandHandler {
 	private void setPadName(Grid grid, CommandSender sender, Pad pad,
 			String newName) {
 
-		if (sender instanceof Player
-				&& !Permissions.getInstance().hasPermission((Player) sender,
-						"grid.pad.set.name")) {
-			sender.sendMessage(Grid.getChatPrefix()
-					+ "You do not have permission to use that command.");
+		if ( !sender.hasPermission( "grid.pad.set.name" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
 
@@ -187,11 +177,8 @@ public class SetCommand extends CommandHandler {
 	private void setPadOwner(Grid grid, CommandSender sender, Pad pad,
 			String owner) {
 
-		if (sender instanceof Player
-				&& !Permissions.getInstance().hasPermission((Player) sender,
-						"grid.pad.set.owner")) {
-			sender.sendMessage(Grid.getChatPrefix()
-					+ "You do not have permission to use that command.");
+		if ( !sender.hasPermission( "grid.pad.set.owner" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
 		
@@ -200,11 +187,8 @@ public class SetCommand extends CommandHandler {
 	private void setPadPassword(Grid grid, CommandSender sender, Pad pad,
 			String password) {
 
-		if (sender instanceof Player
-				&& !Permissions.getInstance().hasPermission((Player) sender,
-						"grid.pad.set.password")) {
-			sender.sendMessage(Grid.getChatPrefix()
-					+ "You do not have permission to use that command.");
+		if ( !sender.hasPermission( "grid.pad.set.password" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
 		
@@ -213,11 +197,8 @@ public class SetCommand extends CommandHandler {
 	private void setPadVisibility(Grid grid, CommandSender sender, Pad pad,
 			String visibility) {
 
-		if (sender instanceof Player
-				&& !Permissions.getInstance().hasPermission((Player) sender,
-						"grid.pad.set.visibility")) {
-			sender.sendMessage(Grid.getChatPrefix()
-					+ "You do not have permission to use that command.");
+		if ( !sender.hasPermission( "grid.pad.set.visibility" ) ) {
+			sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
 			return;
 		}
 		

@@ -33,13 +33,13 @@ public class ListPadsCommand extends CommandHandler {
 				
 				// Iterate over the default pads (IE: Don't belong to a network)
 				
-				listNetwork ( sender, grid.getGlobalNetwork() );
+				listNetwork ( grid, sender, grid.getGlobalNetwork() );
 				
 				for ( Network network : grid.getNetworks() ) {
 					
 					if ( sender.hasPermission("grid.list.network." + network.getId())) {
 					
-						listNetwork ( sender, network );
+						listNetwork ( grid, sender, network );
 						
 					}
 					
@@ -55,7 +55,7 @@ public class ListPadsCommand extends CommandHandler {
 		
 	}
 	
-	private void listNetwork ( CommandSender sender, Network network ) {
+	private void listNetwork ( Grid grid, CommandSender sender, Network network ) {
 		
 		boolean seeHidden = false;
 		boolean seeUnlisted = false;
@@ -81,6 +81,7 @@ public class ListPadsCommand extends CommandHandler {
 		sender.sendMessage ( ChatColor.YELLOW + network.getId() + ":" );
 		
 		for ( Pad pad : network.getPads() ) {
+			
 			if ( pad.getVisibility() == Visibility.Hidden && !seeHidden ) {
 				continue;
 			}
@@ -88,24 +89,44 @@ public class ListPadsCommand extends CommandHandler {
 				continue;
 			}
 			
-			String vis = "-";
+			printPad(sender, pad.getName(), pad);
 			
-			switch ( pad.getVisibility() ) {
+		}
+		
+		// Get associated pads.
+		for ( Pad pad : grid.getAssociatedPads ( network.getId( ) ) ) {
 			
-			case Visible:
-				vis = ChatColor.GREEN + "V" + ChatColor.RESET;
-				break;
-			case Hidden:
-				vis = ChatColor.YELLOW + "H" + ChatColor.RESET;
-				break;
-			case Unlisted:
-				vis = ChatColor.RED + "U" + ChatColor.RESET;
-				break;
-			
+			if ( pad.getVisibility() == Visibility.Hidden && !seeHidden ) {
+				continue;
+			}
+			if( pad.getVisibility() == Visibility.Unlisted && !seeUnlisted ) {
+				continue;
 			}
 			
-			sender.sendMessage( String.format(" %s - %s %s %s", pad.getName(), vis, pad.getSwitches().size(), pad.getTriggers().size() ) );
+			printPad(sender, pad.getName() + ChatColor.GOLD + "@" + pad.getPrimaryNetwork() + ChatColor.RESET, pad);
+			
 		}
+		
+	}
+	
+	private void printPad ( CommandSender sender, String name, Pad pad ) {
+		String vis = "-";
+		
+		switch ( pad.getVisibility() ) {
+		
+		case Visible:
+			vis = ChatColor.GREEN + "V" + ChatColor.RESET;
+			break;
+		case Hidden:
+			vis = ChatColor.YELLOW + "H" + ChatColor.RESET;
+			break;
+		case Unlisted:
+			vis = ChatColor.RED + "U" + ChatColor.RESET;
+			break;
+		
+		}
+		
+		sender.sendMessage( String.format(" %s - %s %s %s", name, vis, pad.getSwitches().size(), pad.getTriggers().size() ) );
 	}
 	
 }

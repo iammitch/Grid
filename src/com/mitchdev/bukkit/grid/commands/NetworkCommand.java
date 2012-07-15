@@ -10,7 +10,6 @@ import com.mitchdev.bukkit.grid.CommandHandler;
 import com.mitchdev.bukkit.grid.Grid;
 import com.mitchdev.bukkit.grid.Network;
 import com.mitchdev.bukkit.grid.Pad;
-import com.mitchdev.bukkit.grid.Permissions;
 
 public class NetworkCommand extends CommandHandler {
 
@@ -111,7 +110,7 @@ public class NetworkCommand extends CommandHandler {
 	public void showNetworkList ( Grid grid, CommandSender sender ) {
 		
 		if ( sender instanceof Player ) {
-			if ( !Permissions.getInstance().hasPermission( (Player)sender, "grid.network.list" ) ) {
+			if ( !sender.hasPermission( "grid.network.list" ) ) {
 				sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command.");
 				return;
 			}	

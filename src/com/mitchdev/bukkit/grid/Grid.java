@@ -214,4 +214,19 @@ public class Grid extends JavaPlugin implements Listener {
 		return this.globalNetwork;
 	}
 
+	public LinkedList<Pad> getAssociatedPads(String id) {
+		LinkedList<Pad> pads = new LinkedList<Pad>();
+		for ( Network net : networks ) {
+			if ( net.getId().equalsIgnoreCase(id)) {
+				continue;
+			}
+			for ( Pad pad : net.getPads() ) {
+				if ( pad.hasNetwork(id)) {
+					pads.add(pad);
+				}
+			}
+		}
+		return pads;
+	}
+
 }

@@ -10,7 +10,6 @@ import com.mitchdev.bukkit.grid.CommandHandler;
 import com.mitchdev.bukkit.grid.Grid;
 import com.mitchdev.bukkit.grid.Network;
 import com.mitchdev.bukkit.grid.Pad;
-import com.mitchdev.bukkit.grid.Permissions;
 import com.mitchdev.bukkit.grid.Visibility;
 
 public class TeleportCommand extends CommandHandler {
@@ -103,8 +102,9 @@ public class TeleportCommand extends CommandHandler {
 
 			Player player = (Player)sender;
 
-			if (!Permissions.getInstance().hasPermission(player, "grid.pad.use")) {
-				player.sendMessage(Grid.getChatPrefix() + ChatColor.RED + "You don't have permission to use that command..");
+			if ( !sender.hasPermission( "grid.pad.use" ) ) {
+				sender.sendMessage(Grid.getChatPrefix() + "You do not have permission to use this command..");
+				return true;
 			}
 			else {
 
