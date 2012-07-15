@@ -135,6 +135,16 @@ public class Grid extends JavaPlugin implements Listener {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+		if ( sender instanceof Player ) {
+			String argstr = "";
+			for ( int i = 0; i < args.length; i++ ) {
+				argstr += args[i];
+				if ( i + 1 != args.length ) {
+					argstr += " ";
+				}
+			}
+			this.getLogger().log( Level.INFO, "[PLAYER_COMMAND] " + ((Player)sender).getName() + ": /" + commandLabel + " " + argstr );
+		}
 		return commands.handle ( this, sender, cmd, commandLabel, args );
 	}
 
