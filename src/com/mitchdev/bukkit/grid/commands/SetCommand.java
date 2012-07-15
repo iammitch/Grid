@@ -90,11 +90,11 @@ public class SetCommand extends CommandHandler {
 
 			Pad pad = grid.getPad(player);
 
-			int offset = commandLabel.equalsIgnoreCase("gs") ? 1 : 0;
+			int offset = commandLabel.equalsIgnoreCase("gs") ? 0 : 1;
 
 			if (pad != null) {
 				doSet(grid, sender, pad, (String[]) ArrayUtils.subarray(args,
-						1 + offset, args.length));
+						offset, args.length));
 			} else {
 				sender.sendMessage(Grid.getChatPrefix() + "No pad found.");
 			}
