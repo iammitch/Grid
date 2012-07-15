@@ -57,7 +57,24 @@ public class ListPadsCommand extends CommandHandler {
 					if( pad.getVisibility() == Visibility.Unlisted && !seeUnlisted ) {
 						continue;
 					}
-					sender.sendMessage(String.format(" %s - %s %s %s", pad.getName(), "-", "-", "-"));
+					
+					String vis = "-";
+					
+					switch ( pad.getVisibility() ) {
+					
+					case Visible:
+						vis = ChatColor.GREEN + "V" + ChatColor.RESET;
+						break;
+					case Hidden:
+						vis = ChatColor.YELLOW + "H" + ChatColor.RESET;
+						break;
+					case Unlisted:
+						vis = ChatColor.RED + "U" + ChatColor.RESET;
+						break;
+					
+					}
+					
+					sender.sendMessage( String.format(" %s - %s %s %s", pad.getName(), vis, pad.getSwitches().size(), pad.getTriggers().size() ) );
 				}
 				
 				return true;
