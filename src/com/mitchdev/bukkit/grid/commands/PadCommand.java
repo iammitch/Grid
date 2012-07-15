@@ -49,6 +49,9 @@ public class PadCommand extends CommandHandler {
 			
 			int offset = commandLabel.equalsIgnoreCase("gp") ? 0 : 1;
 			
+			// Offset if 'gp': 0
+			// Offset if 'grid pad': 1
+			
 			if ( args.length == offset ) {
 				helpMessage(sender);
 			}
@@ -64,6 +67,9 @@ public class PadCommand extends CommandHandler {
 						match = true;
 					}
 				}
+				
+				// Offset if match: 0
+				// Offset if no match: +1
 				
 				// Check that we're not a console trying to use the shorthand way of configuring
 				// a pad..
@@ -90,11 +96,13 @@ public class PadCommand extends CommandHandler {
 				}
 				else {
 				
-					String command = args[offset+(match?2:1)];
+					int matchOffset = match ? 0 : 1;
+					
+					String command = args[offset+matchOffset];
 				
 					// Split off depending on what command we are after.
 					if ( command.equalsIgnoreCase( "network" ) ) {
-						padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + 2, args.length) );
+						padNetworkCommand ( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + matchOffset + 1, args.length) );
 					}
 					else if ( command.equalsIgnoreCase( "enable" ) ) {
 						padEnableCommand( grid, sender, pad );
@@ -103,7 +111,7 @@ public class PadCommand extends CommandHandler {
 						padDisableCommand( grid, sender, pad );
 					}
 					else if ( command.equalsIgnoreCase( "set" ) ) {
-						setCommand.doSet( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + 2, args.length) );
+						setCommand.doSet( grid, sender, pad, (String[]) ArrayUtils.subarray(args, offset + matchOffset + 1, args.length) );
 					}
 					else {
 						sender.sendMessage(Grid.getChatPrefix() + "Invalid Command.");
